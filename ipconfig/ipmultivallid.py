@@ -15,14 +15,11 @@ cookies = urllib2.HTTPCookieProcessor()
 def ip_valid():
     try:
         lock.acquire()
-        line = infile.readline().split('\t')
-        print line
-        print len(line)
-        protocol=line[0]
-        ip=line[1]
-        port = line[2]
+        line = infile.readline()
+        protocol,ip,port=line.split('\t')
         lock.release()
     except Exception as e:
+        print e
         print '没有数据可以读取了...'
 
     try:
@@ -40,8 +37,10 @@ def ip_valid():
     except Exception as e:
         print e
 
+
+num = len(open(infile,'r').readlines())
 thread_list =[]
-for i in range(11):
+for i in range(num):
     threads = threading.Thread(target=ip_valid,name=('thread %s' % i))
     thread_list.append(threads)
     threads.start()

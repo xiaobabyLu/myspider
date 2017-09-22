@@ -27,13 +27,14 @@ baidu_header = {'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWeb
 
               }
 req_timeout = 5
-testUrl = 'https://www.baidu.com/'
-testStr = 'baidu'
-file = open('proxy.txt','w')
+testUrl = 'https://www.douban.com/'
+testStr = 'douban'
 
 cookies = urllib2.HTTPCookieProcessor()
 checked_num =0
 grasp_num =0
+
+file = open(r'douban_proxy.txt','a')
 
 for page in range(1,10):
     req = urllib2.Request('http://www.xici.net.co/nn/'+str(page),None,xici_headers)
@@ -54,12 +55,14 @@ for page in range(1,10):
             proxyHandler = urllib2.ProxyHandler({'http':r'http://%s:%s' % (ip,port)})
             opener = urllib2.build_opener(cookies,proxyHandler)
             opener.addheaders = [('User-Agent','Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36')]
-            t1 = time.time()
+
             try:
+                print 1111
                 req = opener.open(testUrl,timeout=req_timeout)
+                print 2222
                 result = req.read()
-                timeused = time.time() - t1
-                # if len(result)>1000;
+                print 3333
+                print result
                 pos = result.find(testStr)
                 if pos>1:
                     file.write(protocol+'\t'+ip+'\t'+port+'\n')
@@ -67,6 +70,7 @@ for page in range(1,10):
                     checked_num += 1
                     print checked_num,grasp_num
                 else:
+                    print 'forbbidon'
                     continue
             except Exception as e:
                 continue

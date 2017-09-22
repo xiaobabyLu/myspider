@@ -3,6 +3,9 @@
 import urllib2
 import re
 import time
+import random
+import threading
+import string
 
 headers = {
     'Accept': '*/*',
@@ -13,11 +16,23 @@ headers = {
     'Connection': 'keep-alive'
 }
 
-# 指定爬取范围（这里是第1~1000页）
-for i in range(1,1000):
 
-    url = 'http://www.xicidaili.com/nn/' + str(i)
-    req = urllib2.Request(url=url,headers=headers)
-    res = urllib2.urlopen(req).read()
-    print res
-    time.sleep(100)
+def test(i):
+    print "bid=%s" % "".join(random.sample(string.ascii_letters + string.digits, 11))
+    print '开始第:'+ str(i)
+
+
+if __name__ == "__main__":
+    for n in range(1,10):
+        thread = []
+        print '------------------第 '+str(n)+' 批次开始执行------------------'
+        for i in range(n*10,n*10+10):
+
+            t = threading.Thread(target=test,args=(i,))
+            thread.append(t)
+
+        for i in range(1,10):
+            thread[i].start()
+
+        for i in range(1,10):
+            thread[i].join()
